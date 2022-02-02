@@ -9,10 +9,10 @@ interface IProps<T> {
 
 function ReactiveHeight <T>({ data, estimatedItemHeight, itemRender }: IProps<T>) {
   const [scrollTop, setScrollTop] = useState(0)
-  const [clientHeight, setClientHeight] = useState(0)
+  const [clientHeight, setClientHeight] = useState(0);  
   const itemRefs = useRef<Array<HTMLDivElement | null>>([])
 
-  const { totalHeight, visibleData, offset, updatePositions } = useReactiveHeightVirtualList({
+  const { totalHeight, visibleData, offset } = useReactiveHeightVirtualList({
     data,
     estimatedItemHeight,
     scrollTop,
@@ -37,12 +37,6 @@ function ReactiveHeight <T>({ data, estimatedItemHeight, itemRender }: IProps<T>
     }
   }, [])
 
-  useEffect(() => {
-    if (visibleData) {
-      itemRefs.current = []
-    }
-  }, [visibleData])
-
   return (
     <div
       className="container"
@@ -57,15 +51,13 @@ function ReactiveHeight <T>({ data, estimatedItemHeight, itemRender }: IProps<T>
         className="visible-list"
         style={{ transform: `translateY(${offset}px)` }}
       >
+		
         {visibleData.map((data, index) => (
           <div
             key={(data as any).id}
             // 有其他办法拿到一组 DOM 吗？
             ref={(node) => {
-              itemRefs.current[index] = node
-              if (visibleData.length === itemRefs.current.filter(Boolean).length) {
-                updatePositions()
-              }
+              itemRefs.current[index] = node;
             }}
           >{itemRender(data)}</div>
         ))}

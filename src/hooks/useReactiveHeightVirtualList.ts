@@ -38,10 +38,16 @@ export default function useReactiveHeightVirtualList <T> ({
 
   // 二分查找 `startIndex`
   const t1 = performance.now()
-  const startIndex = binarySearch(positions.slice(0, Math.ceil(scrollTop / estimatedItemHeight) + 1).map((p) => p.offset), scrollTop)
+  // 可视窗口的startindex
+  let startIndex = binarySearch(positions.slice(0, Math.ceil(scrollTop / estimatedItemHeight) + 1).map((p) => p.offset), scrollTop);
   const t2 = performance.now()
   console.log('查找 startIndex 耗时： ', t2 - t1)
-  const endIndex = Math.ceil(clientHeight / estimatedItemHeight) + startIndex + 1
+  // 可视窗口的endindex
+  let endIndex = Math.ceil(clientHeight / estimatedItemHeight) + startIndex + 1;
+  // 上下多渲染3个防止滑动太快变成空白
+  startIndex = startIndex - 3 <= 0 ? 0 : startIndex - 3;
+  endIndex = endIndex + 3;
+
   const visibleData = useMemo(() => data.slice(startIndex, endIndex), [data, endIndex, startIndex])
 
   // 根据渲染的列表项，获取实际高度并更新 `positions` 数组
@@ -81,10 +87,13 @@ export default function useReactiveHeightVirtualList <T> ({
     }
   }, [itemRefs, positions, startIndex])
 
+  useEffect(()=>{
+	updatePositions();
+  }, [updatePositions])
+
   return {
     totalHeight: positions[positions.length - 1]?.offset || 0,
     visibleData,
     offset: (positions[startIndex]?.offset || 0) - (positions[startIndex]?.height || 0),
-    updatePositions,
   }
 }

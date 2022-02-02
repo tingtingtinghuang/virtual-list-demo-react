@@ -47,6 +47,7 @@ export default function usePropHeightVirtualList <T> ({
   const positionsRef = useRef<IPosition[]>()
   positionsRef.current = positions
   // 根据渲染的列表项，获取实际高度并更新 `positions` 数组
+  // 只在startIndex或者endIndex变更的时候重新计算，其实也可以在scroll的时候计算。但是这样可以提高性能
   useEffect(() => {
     if (!positionsRef.current || !positionsRef.current.length || startIndex === -1) return
     const positions = positionsRef.current
@@ -65,8 +66,9 @@ export default function usePropHeightVirtualList <T> ({
         }
       }
     }
-    if (firstUpdatedIndex !== -1) {
-      // 有更新的节点
+	
+    if (firstUpdatedIndex !== -1) {  
+		// 有更新的节点
       positions.forEach((p, i) => {
         if (!newPositions[i]) newPositions[i] = p
       })

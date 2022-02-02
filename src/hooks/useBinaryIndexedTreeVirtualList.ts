@@ -25,7 +25,7 @@ export default function useBinaryIndexedTreeVirtualList <T> ({
     for (let i = 0; i < length; i++) {
       initPositions[i] = estimatedItemHeight
     }
-    treeRef.current = new BinaryIndexedTree(initPositions)
+    treeRef.current = new BinaryIndexedTree(initPositions);
   }, [data.length, estimatedItemHeight])
 
   // 查找 `startIndex`
