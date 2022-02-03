@@ -71,8 +71,10 @@ export default function useReactiveHeightVirtualList <T> ({
         }
       }
     })
+
+	// 有更新的节点
     if (firstUpdatedIndex !== -1) {
-      // 有更新的节点
+      // 将没有更新的节点的信息也复制到newPositions
       positions.forEach((p, i) => {
         if (!newPositions[i]) newPositions[i] = p
       })
