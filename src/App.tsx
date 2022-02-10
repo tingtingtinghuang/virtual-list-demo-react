@@ -4,6 +4,7 @@ import Counter from './components/Counter'
 import FixedHeight from './components/FixedHeight'
 import PropHeight from './components/PropHeight'
 import ReactiveHeight from './components/ReactiveHeight'
+import ReverseReactiveHeight from './components/ReverseReactiveHeight';
 import OptimizedReactiveHeight from './components/OptimizedReactiveHeight'
 import NormalList from './components/NormalList'
 import dataGen from './utils/data-generator'
@@ -36,6 +37,10 @@ const radioButtons = [
   {
     path: '/fixed-height-with-counter',
     text: '带计数器',
+  },
+  {
+    path: '/reverse-reactive-height',
+    text: '自适应+reverse',
   },
 ]
 
@@ -147,6 +152,12 @@ export default function App () {
               data={data}
               itemHeight={50}
               itemRender={itemRenderWithCounter}
+            />
+          </Route>
+		  <Route path="/reverse-reactive-height">
+            <ReverseReactiveHeight
+              estimatedItemHeight={50}
+              itemRender={reactiveHeightItemRender}
             />
           </Route>
         </Switch>
