@@ -105,15 +105,12 @@ export default function useReverseReactiveHeightVirtualList <T> ({
 	updatePositions();
   }, [updatePositions])
 
-  // 在data.length发生变化的时候，就更新scrollTop到正确的位置
+  // 在positions发生变化的时候，就更新scrollTop到正确的位置
   useLayoutEffect(()=>{
-	if(dataLenRef.current !== data.length){
-		dataLenRef.current = data.length;
-		// 这里的20-1是因为每次加载了20个数据，todo：以后改写成变量
-		let offset = positions[20 - 1]?.offset;
-		setScrollerTop(offset);
-	}
-  },[data.length, positions, setScrollerTop])
+	// 这里的20-1是因为每次加载了20个数据，todo：以后改写成变量
+	let offset = positions[20 - 1]?.offset;
+	setScrollerTop(offset);
+  },[positions, setScrollerTop])
 
   return {
     totalHeight: positions[positions.length - 1]?.offset || 0,
